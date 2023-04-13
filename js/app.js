@@ -38,16 +38,28 @@ function mostrarAlerta(mensaje){
     }
 }
 
-function buscarImagenes(){
+async function buscarImagenes(){
     const terminoBusqueda = document.querySelector('#termino').value;
     const key = '23278091-88565a34117caf8eb3f6677f3';
     const url = `https://pixabay.com/api/?key=${key}&q=${terminoBusqueda}&per_page=${registrosPorPagina}&page=${paginaActual}`;
-    fetch(url)
-        .then(respuesta => respuesta.json())
-        .then(resultado => {
-            totalPaginas = calcularPaginas(resultado.totalHits)
-            mostrarImagenes(resultado.hits)
-        })
+    
+    // fetch(url)
+    //     .then(respuesta => respuesta.json())
+    //     .then(resultado => {
+    //         totalPaginas = calcularPaginas(resultado.totalHits)
+    //         mostrarImagenes(resultado.hits)
+    //     })
+
+    try {
+        const respuesta = await fetch(url)
+        const resultado = await respuesta.json()
+        totalPaginas = calcularPaginas(resultado.totalHits)
+        mostrarImagenes(resultado.hits)
+
+    } catch (error) {
+        console.log(error)
+    }
+
 }
 
 function *crearPaginador(total){
